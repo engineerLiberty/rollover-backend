@@ -1,4 +1,4 @@
-package com.engineerLee.rolloverapi.auth.response;
+package com.engineerLee.rolloverapi.registration.response;
 
 import lombok.Builder;
 import lombok.Data;

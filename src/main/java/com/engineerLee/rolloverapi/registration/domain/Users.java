@@ -1,10 +1,12 @@
-package com.engineerLee.rolloverapi.registration.model;
+package com.engineerLee.rolloverapi.registration.domain;
 
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @Builder
+@Document(collation = "users")
 public class Users {
     private Long id;
     private String firstName;

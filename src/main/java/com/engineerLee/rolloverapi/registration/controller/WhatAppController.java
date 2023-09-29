@@ -1,8 +1,7 @@
 package com.engineerLee.rolloverapi.registration.controller;
 
-import com.engineerLee.rolloverapi.registration.request.RegistrationRequest;
-import com.engineerLee.rolloverapi.registration.response.RegistrationResponse;
-import com.engineerLee.rolloverapi.registration.service.RegistrationService;
+import com.engineerLee.rolloverapi.registration.domain.WhatsApp;
+import com.engineerLee.rolloverapi.registration.service.WhatsAppLinkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,12 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
-public class RegistrationApi {
-    private final RegistrationService registrationService;
+@RequestMapping("/api/v2")
+public class WhatAppController {
+    private final WhatsAppLinkService whatsAppLinkService;
     @PostMapping("register")
     @ResponseStatus(HttpStatus.CREATED)
-    public RegistrationResponse registration(RegistrationRequest registrationRequest) {
-        return registrationService.registerNewUser(registrationRequest);
+    public WhatsApp addNewWhatsAppLink(String whatsAppLink) {
+        return whatsAppLinkService.addWhatsAppLink(whatsAppLink);
     }
 }

@@ -67,6 +67,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>rollover</finalName>
     </build>
 
 </project>

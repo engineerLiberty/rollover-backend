@@ -33,7 +33,6 @@ public class RegistrationService {
                 .state_of_residence(registrationRequest.getState_of_residence())
                 .nationality(registrationRequest.getNationality())
                 .build();
-        log.info(users);
         usersRepository.save(users);
         String name = users.getFirstName() + " " + users.getLastName();
         if (users.getOtherName() != null) {

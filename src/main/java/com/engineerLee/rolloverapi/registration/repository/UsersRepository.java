@@ -1,13 +1,14 @@
 package com.engineerLee.rolloverapi.registration.repository;
 
-import com.engineerLee.rolloverapi.registration.domain.Users;
-import com.engineerLee.rolloverapi.registration.request.RegistrationRequest;
+import com.engineerLee.rolloverapi.registration.domain.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
+import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
+@Repository
+public interface UsersRepository extends MongoRepository<User, String> {
+    List<User> findByFirstNameStartsWith(String name);
+    User findByEmail(String email);
+    User findByPhoneNumber(String phone);
 
-public interface UsersRepository extends MongoRepository<Users, Long> {
-    @Query("{phoneNumber:0}")
-    Optional<Users> findByPhoneNumber(String phoneNumber);
 }

@@ -2,6 +2,8 @@ package com.engineerLee.rolloverapi.registration.controller;
 
 import com.engineerLee.rolloverapi.registration.domain.WhatsApp;
 import com.engineerLee.rolloverapi.registration.service.WhatsAppLinkService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class WhatAppController {
     private final WhatsAppLinkService whatsAppLinkService;
     @PostMapping("register")
+    @Tag(name = "Add WhatsApp Link")
     @ResponseStatus(HttpStatus.CREATED)
     public WhatsApp addNewWhatsAppLink(String whatsAppLink) {
         return whatsAppLinkService.addWhatsAppLink(whatsAppLink);

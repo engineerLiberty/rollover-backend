@@ -1,13 +1,18 @@
 package com.engineerLee.rolloverapi.registration.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class RegistrationResponse {
-    private String name;
-    private String userName;
-    private String personal_whatsApp_group_link;
-    private String whatApp_group_link;
+    private String fullName;
+    private String email;
+    private String phoneNumber;
+    private String port_whatsApp_link;
+    private String group_whatApp_link;
 }

@@ -17,7 +17,9 @@ public class RegistrationService {
     private final UsersRepository usersRepository;
 
     public RegistrationResponse registerNewUser(RegistrationRequest registrationRequest) {
-        User users= User.builder()
+
+        validateRegistrationRequest(registrationRequest);
+        User newUser = User.builder()
                 .userName(registrationRequest.getUserName())
                 .firstName(registrationRequest.getFirstName())
                 .otherName(registrationRequest.getOtherName())
@@ -32,14 +34,17 @@ public class RegistrationService {
                 .state_of_residence(registrationRequest.getState_of_residence())
                 .nationality(registrationRequest.getNationality())
                 .build();
-        usersRepository.save(users);
-        String name = users.getFirstName() + " " + users.getLastName();
-        if (users.getOtherName() != null) {
-            name = users.getFirstName() + " " + users.getOtherName() + " " + users.getLastName();
+        usersRepository.save(newUser);
+        String name = newUser.getFirstName() + " " + newUser.getLastName();
+        if (newUser.getOtherName() != null) {
+            name = newUser.getFirstName() + " " + newUser.getOtherName() + " " + newUser.getLastName();
         }
         return RegistrationResponse.builder()
-                .name(name)
-                .userName(registrationRequest.getUserName())
+                .fullName(name)
+                .email(registrationRequest.getEmail())
+                .phoneNumber(registrationRequest.getPhoneNumber())
+                .port_whatsApp_link("")
+                .group_whatApp_link("")
                 .build();
     }
 
@@ -57,5 +62,13 @@ public class RegistrationService {
 
     public User getPhone(String phone) {
         return usersRepository.findByPhoneNumber(phone);
+    }
+    private void validateRegistrationRequest(RegistrationRequest request) {
+        if (usersRepository.findByPhoneNumber(request.getPhoneNumber()) != null){
+            throw new RuntimeException("User Already exist with this phone number: "+request.getPhoneNumber());
+        }
+        if (usersRepository.findByEmail(request.getEmail())!=null){
+            throw new RuntimeException("Email already exist: "+request.getEmail());
+        }
     }
 }

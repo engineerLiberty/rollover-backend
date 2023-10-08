@@ -48,6 +48,8 @@ public class RegistrationService {
                 .build();
     }
 
+
+
     public List<User> getAllRegisteredUsers() {
        return usersRepository.findAll();
     }
@@ -71,4 +73,23 @@ public class RegistrationService {
             throw new RuntimeException("Email already exist: "+request.getEmail());
         }
     }
+
+    public User findUserDetails(String email, String phoneNumber, String username) {
+        User user;
+        if (usersRepository.findByEmail(email) != null) {
+            user = usersRepository.findByEmail(email);
+
+        } else if (usersRepository.findByUserName(username) != null) {
+            return usersRepository.findByUserName(username);
+
+        } else if (usersRepository.findByPhoneNumber(phoneNumber) != null) {
+            user = usersRepository.findByPhoneNumber(phoneNumber);
+
+        } else {
+            throw new RuntimeException("User does not exist on database");
+        }
+
+        return user;
+    }
 }
+

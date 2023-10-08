@@ -32,19 +32,32 @@ public class UserController {
 
     @GetMapping("firstName")
     @Tag(name = "Search By First Name")
+    @ResponseStatus(HttpStatus.OK)
     public List<User> getPersonStartWith(@RequestParam("name")String name) {
         return registrationService.getPersonStartWith(name);
     }
 
     @GetMapping("email")
     @Tag(name = "Search By Email")
+    @ResponseStatus(HttpStatus.OK)
     public User getEmail(@RequestParam("email") String email) {
         return registrationService.getEmail(email);
     }
 
     @GetMapping("phone")
     @Tag(name = "Search By Phone number")
+    @ResponseStatus(HttpStatus.OK)
     public User getPhoneNumber(@RequestParam("phone") String phone) {
         return registrationService.getPhone(phone);
+    }
+
+    @GetMapping("/findUser")
+    @Tag(name = "Get-user-details")
+    @ResponseStatus(HttpStatus.OK)
+    public User findUserByEmailOrPhoneNumberOrUsername( @RequestParam(value = "email", required = false) String email,
+                                                        @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
+                                                        @RequestParam(value = "username", required = false) String username) {
+        return registrationService.findUserDetails(email,phoneNumber,username);
+
     }
 }

@@ -6,8 +6,15 @@ import com.engineerLee.rolloverapi.registration.request.RegistrationRequest;
 import com.engineerLee.rolloverapi.registration.response.RegistrationResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -15,6 +22,8 @@ import java.util.List;
 @Log4j2
 public class RegistrationService {
     private final UsersRepository usersRepository;
+    private final MongoTemplate mongoTemplate;
+    private  Pageable pageable;
 
     public RegistrationResponse registerNewUser(RegistrationRequest registrationRequest) {
 
@@ -75,6 +84,7 @@ public class RegistrationService {
     }
 
     public User findUserDetails(String email, String phoneNumber, String username) {
+
         User user;
         if (usersRepository.findByEmail(email) != null) {
             user = usersRepository.findByEmail(email);
@@ -90,6 +100,33 @@ public class RegistrationService {
         }
 
         return user;
+    }
+
+    public List<User> search(String firstName,String lastName,String email, String phoneNumber, String username) {
+
+        Query query = new Query();
+
+        List<Criteria> criteria = new ArrayList<>();
+        if (firstName != null && !firstName.isEmpty()) {
+            criteria.add(Criteria.where("firstName").regex(firstName,"i"));
+        }
+        if (lastName != null && !lastName.isEmpty()) {
+            criteria.add(Criteria.where("lastName").regex(lastName,"i"));
+        }
+        if (email != null && !email.isEmpty()) {
+            criteria.add(Criteria.where("email").regex(email,"i"));
+        }
+        if (phoneNumber != null && !phoneNumber.isEmpty()) {
+            criteria.add(Criteria.where("phoneNumber").regex(phoneNumber));
+        }
+        if (username != null && !username.isEmpty()) {
+            criteria.add(Criteria.where("username").regex(username));
+        }
+        if (!criteria.isEmpty()) {
+            query.addCriteria(new Criteria().andOperator(criteria.toArray(new Criteria[0])));
+        }
+        return mongoTemplate.find(query,User.class);
+
     }
 }
 

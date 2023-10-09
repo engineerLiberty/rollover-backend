@@ -14,5 +14,5 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class WhatsApp {
     @org.springframework.data.annotation.Id
     private Long Id;
-    private String whatsappGroupLink;
+    private String whatsappGroupLink ="www.whats_link_test.com";
 }

@@ -6,6 +6,8 @@ import com.engineerLee.rolloverapi.registration.response.RegistrationResponse;
 import com.engineerLee.rolloverapi.registration.service.RegistrationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -58,6 +60,18 @@ public class UserController {
                                                         @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
                                                         @RequestParam(value = "username", required = false) String username) {
         return registrationService.findUserDetails(email,phoneNumber,username);
+
+    }
+
+    @GetMapping("/search")
+    @Tag(name = "Search")
+    @ResponseStatus(HttpStatus.OK)
+    public List<User> search(@RequestParam(value = "firstName", required = false) String firstName,
+                             @RequestParam(value = "lastName", required = false) String lastName,
+                             @RequestParam(value = "email", required = false) String email,
+                             @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
+                             @RequestParam(value = "username", required = false) String username) {
+        return registrationService.search(firstName,lastName,email,phoneNumber,username);
 
     }
 }

@@ -1,6 +1,6 @@
 package com.engineerLee.rolloverapi.registration.service;
 
-import com.engineerLee.rolloverapi.registration.domain.WhatsApp;
+import com.engineerLee.rolloverapi.registration.models.WhatsApp;
 import com.engineerLee.rolloverapi.registration.repository.WhatsAppRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

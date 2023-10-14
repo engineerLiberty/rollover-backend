@@ -1,4 +1,4 @@
-package com.engineerLee.rolloverapi.registration.domain;
+package com.engineerLee.rolloverapi.registration.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

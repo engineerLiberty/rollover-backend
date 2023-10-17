@@ -5,13 +5,17 @@ import com.engineerLee.rolloverapi.auth.response.AuthenticationResponse;
 import com.engineerLee.rolloverapi.auth.service.AuthenticationService;
 import com.engineerLee.rolloverapi.auth.request.RegistrationRequest;
 import com.engineerLee.rolloverapi.auth.response.RegistrationResponse;
+import com.engineerLee.rolloverapi.config.LogoutService;
 import com.engineerLee.rolloverapi.security.JwtService;
 import com.engineerLee.rolloverapi.token.model.Token;
+import com.engineerLee.rolloverapi.token.repository.CustomTokenRepository;
 import com.engineerLee.rolloverapi.token.request.RefreshTokenRequest;
 import com.engineerLee.rolloverapi.token.service.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -20,7 +24,8 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
     private final TokenService tokenService;
-    private final JwtService jwtService;
+    private final CustomTokenRepository customTokenRepository;
+    private final LogoutService logoutService;
 
     @PostMapping("login")
     @ResponseStatus(HttpStatus.ACCEPTED)
@@ -38,6 +43,12 @@ public class AuthenticationController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public AuthenticationResponse refreshToken(@RequestBody RefreshTokenRequest tokenRequest) {
       return  tokenService.refreshToken(tokenRequest);
+    }
+
+    @GetMapping("findByTokenUserId/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Token> findByTokenUserId(@PathVariable(value = "userId") String userId) {
+      return customTokenRepository.findByUserIdAndExpiredOrRevokedFalse(userId);
     }
 
 //    public AuthenticationResponse refreshToken(@RequestBody RefreshTokenRequest tokenRequest) {

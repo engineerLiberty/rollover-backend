@@ -7,6 +7,8 @@ import com.engineerLee.rolloverapi.auth.response.RegistrationResponse;
 import com.engineerLee.rolloverapi.exceptions.InsufficientUserDetailsException;
 import com.engineerLee.rolloverapi.security.JwtService;
 import com.engineerLee.rolloverapi.token.model.Token;
+import com.engineerLee.rolloverapi.token.repository.CustomTokenRepository;
+import com.engineerLee.rolloverapi.token.repository.TokenRepository;
 import com.engineerLee.rolloverapi.token.service.TokenService;
 import com.engineerLee.rolloverapi.user.models.AppUser;
 import com.engineerLee.rolloverapi.user.repository.UsersRepository;
@@ -15,6 +17,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import static com.engineerLee.rolloverapi.enums.Roles.ROLE_USER;
 import static com.engineerLee.rolloverapi.enums.Status.PENDING;
@@ -26,6 +30,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final TokenService tokenService;
+    private final TokenRepository tokenRepository;
     public RegistrationResponse registerNewUser(RegistrationRequest registrationRequest) {
 
         validateRegistrationRequest(registrationRequest);
@@ -65,12 +70,12 @@ public class AuthenticationService {
                 authRequest.getUserName(),
                 authRequest.getPassWord()
         ));
-        var user = usersRepository.findByUserName(authRequest.getUserName()).orElseThrow();
-        Token refresToken = tokenService.createRefreshToken(authRequest.getUserName());
-        var token = jwtService.generateToken(user);
+//        var user = usersRepository.findByUserName(authRequest.getUserName()).orElseThrow();
+        Token authenticationToken = tokenService.createAuthenticationToken(authRequest.getUserName());
+//        var token = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
-                .accessToke(token)
-                .refreshTokenId(refresToken.getToken())
+                .accessToke(authenticationToken.getJwtToken())
+                .refreshTokenId(authenticationToken.getRefreshToken())
                 .build();
     }
 

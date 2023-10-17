@@ -19,9 +19,11 @@ import java.time.Instant;
 public class Token {
     @Id
     private String id;
-    private String token;
+    private String refreshToken;
+    private String jwtToken;
     private String tokenType;
     private boolean revoked;
+    private boolean expired;
     private Instant expirationDate;
     @DBRef
     private AppUser appUser;

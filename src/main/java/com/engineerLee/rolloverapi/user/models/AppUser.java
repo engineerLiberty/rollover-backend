@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.List;
 
 @EqualsAndHashCode()
-@Document(collection = "user")
+@Document(collection = "appUser")
 @Data
 @Builder
 @AllArgsConstructor
@@ -65,6 +65,8 @@ public class AppUser implements UserDetails {
     private Status status;
     private Roles roles;
     private String whatsappGroupLink;
+    @DBRef
+    private List<Token> tokens;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(roles.toString()));

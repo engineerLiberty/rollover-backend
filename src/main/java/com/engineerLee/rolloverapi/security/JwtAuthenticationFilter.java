@@ -1,5 +1,7 @@
 package com.engineerLee.rolloverapi.security;
 
+import com.engineerLee.rolloverapi.token.repository.TokenRepository;
+import com.engineerLee.rolloverapi.token.service.TokenService;
 import com.mongodb.lang.NonNull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,6 +22,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final TokenRepository tokenRepository;
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -37,7 +40,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
        userName = jwtService.extractUserName(jwt);
        if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
            UserDetails registeredUser = this.userDetailsService.loadUserByUsername(userName);
-           if (jwtService.isTokenValid(jwt,registeredUser)) {
+           var isTokenValid = tokenRepository.findByJwtToken(jwt).map(t-> !t.isExpired() && !t.isRevoked()).orElse(false);
+           if (jwtService.isTokenValid(jwt,registeredUser) && isTokenValid) {
                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(registeredUser,
                        null,
                        registeredUser.getAuthorities()
